@@ -1,66 +1,99 @@
 <template>
-  <footer class="footer">
-    <div class="container">
-      <p>&copy; {{ currentYear }} Your Company Name. All rights reserved.</p>
-      <ul class="social-media">
-        <li>
-          <a
-            href="https://facebook.com"
-            target="_blank"
-            rel="noopener noreferrer"
-            >Facebook</a
-          >
-        </li>
-        <li>
-          <a
-            href="https://twitter.com"
-            target="_blank"
-            rel="noopener noreferrer"
-            >Twitter</a
-          >
-        </li>
-        <li>
-          <a
-            href="https://instagram.com"
-            target="_blank"
-            rel="noopener noreferrer"
-            >Instagram</a
-          >
-        </li>
-      </ul>
+  <div class="app-container">
+    <!-- Nội dung chính của bạn ở đây -->
+
+    <!-- Footer -->
+    <div class="footer">
+      <el-row justify="center">
+        <el-col :span="12">
+          <div class="footer-content">
+            <p>&copy; 2024 Quản lý Mượn Sách</p>
+            <div>
+              <el-button @click="signOut(user)" type="primary" size="small"
+                >Đăng xuất</el-button
+              >
+            </div>
+            <div>
+              <el-link href="https://github.com" target="_blank"
+                >GitHub</el-link
+              >
+              <el-link href="/about" target="_blank">Giới thiệu</el-link>
+            </div>
+          </div>
+        </el-col>
+      </el-row>
     </div>
-  </footer>
+  </div>
 </template>
 
 <script>
+import {
+  ElButton,
+  ElInput,
+  ElMessage,
+  ElLink,
+  ElRow,
+  ElCol,
+} from 'element-plus';
+import { useUserStore } from '@/stores/user';
+import { mapStores } from 'pinia';
+import { useBookStore } from '@/stores/book';
+
 export default {
-  data() {
+  components: {
+    ElInput,
+    ElButton,
+    ElMessage,
+    ElLink,
+    ElRow,
+    ElCol,
+  },
+  data: () => {
     return {
-      currentYear: new Date().getFullYear(),
+      value: '',
+      user: useUserStore(),
     };
+  },
+  computed: {
+    ...mapStores(useBookStore),
+  },
+  methods: {
+    signOut: (user) => {
+      user.SignOut();
+      ElMessage('Đăng xuất thành công');
+    },
   },
 };
 </script>
 
-<style lang="scss">
+<style scoped>
+.app-container {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
 .footer {
   background-color: #f8f9fa;
   padding: 20px 0;
+  margin-top: auto;
   text-align: center;
 }
 
-.footer .container {
-  max-width: 1200px;
-  margin: 0 auto;
+.footer-content {
+  font-size: 14px;
 }
 
-.social-media {
-  list-style: none;
-  padding: 0;
+.footer-content p {
+  margin-bottom: 10px;
 }
 
-.social-media li {
-  display: inline;
+.footer-content .el-link {
+  margin: 0 10px;
+  font-size: 14px;
+}
+
+.footer-content .el-button {
   margin: 0 10px;
 }
 </style>
